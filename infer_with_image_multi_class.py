@@ -27,7 +27,8 @@ def main(input_data_dir, output_data_dir, generate_only_mask, config_name, class
         bgr_image = cv2.cvtColor(rgb_image, cv2.COLOR_RGB2BGR)
         if generate_only_mask:
             segmentation_mask = infer_and_generate_mask_image(bgr_image, inference)
-            cv2.imwrite(f"{output_data_dir}/{base_name}", segmentation_mask)
+            mask_name = Path(base_name).stem + ".png"
+            cv2.imwrite(f"{output_data_dir}/{mask_name}", segmentation_mask)
         else:
             segmentation_mask = infer_image(bgr_image, inference, class_manager)
             rgb_image_masked = get_overlay_rgb_image(bgr_image, segmentation_mask)
