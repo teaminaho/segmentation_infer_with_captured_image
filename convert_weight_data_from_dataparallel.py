@@ -33,7 +33,8 @@ def fix_model_state_dict_from_model_parallel(state_dict):
 def main(config_name, output_model_file):
     toml_dict = toml.load(open(config_name, "r"))
     weight_file_path = toml_dict["weights"]
-    checkpoint = torch.load(weight_file_path)
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    checkpoint = torch.load(weight_file_path, map_location=torch.device(device))
     checkpoint_fixed = fix_model_state_dict_from_model_parallel(checkpoint)
     torch.save(checkpoint_fixed, output_model_file)
 
